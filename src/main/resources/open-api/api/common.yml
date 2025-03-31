@@ -1,0 +1,77 @@
+openapi: "3.0.4"
+info:
+  version: 1.0.0
+  title: Swagger api for exchanging data with Master Data Service
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8080
+    description: development server for testing
+
+components:
+  schemas:
+    BaseResponse:
+      type: object
+      properties:
+        data:
+          type: object
+        metadata:
+          "$ref": "#/components/schemas/Metadata"
+
+    Metadata:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        totalPage:
+          type: integer
+          format: int32
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldViolation'
+        message:
+          type: string
+        field:
+          type: string
+
+    FieldViolation:
+      type: object
+      properties:
+        field:
+          type: string
+        index:
+          type: integer
+          format: int32
+        description:
+          type: string
+        extraData:
+          type: object
+
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Page number of the requested page
+        size:
+          type: integer
+          format: int32
+          description: Size of a page
+        sort:
+          type: array
+          items:
+            type: string
+          description: Sorting criteria in the format property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.

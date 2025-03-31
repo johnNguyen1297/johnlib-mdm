@@ -1,0 +1,301 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet id="1743394848294-1" author="John Nguyen">
+    <createTable tableName="authors">
+      <column autoIncrement="true" name="id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="bio" type="VARCHAR(255)"/>
+      <column name="nationality" type="VARCHAR(100)"/>
+      <column name="created_by" type="VARCHAR(255)"/>
+      <column name="created_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+      <column name="last_modified_by" type="VARCHAR(255)"/>
+      <column name="last_modified_date" type="datetime"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-2" author="John Nguyen">
+    <createTable tableName="books">
+      <column autoIncrement="true" name="id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="isbn" type="VARCHAR(20)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="title" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="publisher_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="publication_year" type="YEAR(4)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="format" type="ENUM('Hardcover', 'Paperback', 'Ebook')">
+        <constraints nullable="false"/>
+      </column>
+      <column name="print_length" type="INT"/>
+      <column name="description" type="VARCHAR(255)"/>
+      <column name="language" type="VARCHAR(255)"/>
+      <column name="created_by" type="VARCHAR(255)"/>
+      <column name="created_date" type="datetime"/>
+      <column name="last_modified_by" type="VARCHAR(255)"/>
+      <column name="last_modified_date" type="datetime"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-3" author="John Nguyen">
+    <createTable tableName="books_authors_xref">
+      <column name="book_id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="author_id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-4" author="John Nguyen">
+    <createTable tableName="books_import_xref">
+      <column name="id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="import_batch_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="book_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="quantity" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(255)"/>
+      <column name="created_date" type="datetime"/>
+      <column name="last_modified_by" type="VARCHAR(255)"/>
+      <column name="last_modified_date" type="datetime"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-5" author="John Nguyen">
+    <createTable tableName="books_physical">
+      <column autoIncrement="true" name="id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="book_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="import_batch_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="shelf_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="copy_number" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="physical_code" type="VARCHAR(100)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="created_by" type="VARCHAR(255)"/>
+      <column name="created_date" type="datetime"/>
+      <column name="last_modified_by" type="VARCHAR(255)"/>
+      <column name="last_modified_date" type="datetime"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-6" author="John Nguyen">
+    <createTable tableName="books_tags_xref">
+      <column name="book_id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="tag_id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-7" author="John Nguyen">
+    <createTable tableName="import_batches">
+      <column autoIncrement="true" name="id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="batch_code" type="VARCHAR(20)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="import_date" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(255)"/>
+      <column name="created_date" type="datetime"/>
+      <column name="last_modified_by" type="VARCHAR(255)"/>
+      <column name="last_modified_date" type="datetime"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-8" author="John Nguyen">
+    <createTable tableName="publishers">
+      <column autoIncrement="true" name="id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="location" type="VARCHAR(255)"/>
+      <column name="phone" type="VARCHAR(20)"/>
+      <column name="email" type="VARCHAR(255)"/>
+      <column name="established_year" type="YEAR(4)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="VARCHAR(255)"/>
+      <column name="created_by" type="VARCHAR(255)"/>
+      <column name="created_date" type="datetime"/>
+      <column name="last_modified_by" type="VARCHAR(255)"/>
+      <column name="last_modified_date" type="datetime"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-9" author="John Nguyen">
+    <createTable tableName="shelves">
+      <column autoIncrement="true" name="id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="shelf_code" type="CHAR(3)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="location_description" type="VARCHAR(255)"/>
+      <column name="created_by" type="VARCHAR(255)"/>
+      <column name="created_date" type="datetime"/>
+      <column name="last_modified_by" type="VARCHAR(255)"/>
+      <column name="last_modified_date" type="datetime"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-10" author="John Nguyen">
+    <createTable tableName="tags">
+      <column autoIncrement="true" name="id" type="INT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="description" type="VARCHAR(255)"/>
+      <column name="created_by" type="VARCHAR(255)"/>
+      <column name="created_date" type="datetime"/>
+      <column name="last_modified_by" type="VARCHAR(255)"/>
+      <column name="last_modified_date" type="datetime"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1743394848294-11" author="John Nguyen">
+    <createIndex indexName="authors_books" tableName="books_authors_xref">
+      <column name="author_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="1743394848294-12" author="John Nguyen">
+    <createIndex indexName="books_imported" tableName="books_import_xref">
+      <column name="book_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="1743394848294-13" author="John Nguyen">
+    <createIndex indexName="books_physical_book" tableName="books_physical">
+      <column name="book_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="1743394848294-14" author="John Nguyen">
+    <createIndex indexName="books_physical_import_batch" tableName="books_physical">
+      <column name="import_batch_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="1743394848294-15" author="John Nguyen">
+    <createIndex indexName="books_physical_shelf" tableName="books_physical">
+      <column name="shelf_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="1743394848294-16" author="John Nguyen">
+    <createIndex indexName="books_publisher" tableName="books">
+      <column name="publisher_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="1743394848294-17" author="John Nguyen">
+    <createIndex indexName="import_books" tableName="books_import_xref">
+      <column name="import_batch_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="1743394848294-18" author="John Nguyen">
+    <createIndex indexName="tag_id" tableName="books_tags_xref">
+      <column name="tag_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="1743394848294-19" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books_authors_xref" baseColumnNames="author_id"
+      constraintName="authors_books" referencedTableName="authors"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="1743394848294-20" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books_authors_xref" baseColumnNames="book_id"
+      constraintName="books_authors" referencedTableName="books"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="1743394848294-21" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books_import_xref" baseColumnNames="book_id"
+      constraintName="books_imported" referencedTableName="books"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="1743394848294-22" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books_physical" baseColumnNames="book_id"
+      constraintName="books_physical_book" referencedTableName="books"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="1743394848294-23" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books_physical" baseColumnNames="import_batch_id"
+      constraintName="books_physical_import_batch" referencedTableName="import_batches"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="1743394848294-24" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books_physical" baseColumnNames="shelf_id"
+      constraintName="books_physical_shelf" referencedTableName="shelves"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="1743394848294-25" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books" baseColumnNames="publisher_id"
+      constraintName="books_publisher" referencedTableName="publishers"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="1743394848294-26" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books_tags_xref" baseColumnNames="tag_id"
+      constraintName="books_tags_xref_ibfk_1" referencedTableName="tags"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="1743394848294-27" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books_tags_xref" baseColumnNames="book_id"
+      constraintName="books_tags_xref_ibfk_2" referencedTableName="books"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="1743394848294-28" author="John Nguyen">
+    <addForeignKeyConstraint baseTableName="books_import_xref" baseColumnNames="import_batch_id"
+      constraintName="import_books" referencedTableName="import_batches"
+      referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+  </changeSet>
+</databaseChangeLog>

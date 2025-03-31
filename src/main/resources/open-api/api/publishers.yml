@@ -1,0 +1,257 @@
+openapi: "3.0.4"
+info:
+  version: 1.0.0
+  title: Swagger api for exchanging data with Master Data Service
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8081/api/v1.0/mdm
+    description: Development
+
+paths:
+  /api/v1.0/mdm/publishers:
+    post:
+      summary: Create a Publisher
+      description: Create a Publisher
+      operationId: createPublisher
+      tags:
+        - Publisher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SavePublisherRequest"
+        required: true
+      responses:
+        '201':
+          description: Create Publisher successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Filter Publishers
+      description: Filter Publishers
+      operationId: filterPublishers
+      tags:
+        - Publisher
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: establishedYear
+          required: false
+          schema:
+            type: string
+            format: year
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: "common.yml#/components/schemas/Pageable"
+      responses:
+        '200':
+          description: Filter Publishers successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+  /api/v1.0/mdm/publishers/{id}:
+    put:
+      summary: Update a Publisher
+      description: Update a Publisher
+      operationId: updatePublisher
+      tags:
+        - Publisher
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SavePublisherRequest"
+        required: true
+      responses:
+        '200':
+          description: Update Publisher successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Publisher not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Get Publisher Details
+      description: Get Publisher Details
+      operationId: getPublisherDetails
+      tags:
+        - Publisher
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get Publisher details successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Publisher not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    delete:
+      summary: Delete a Publisher
+      description: Delete a Publisher
+      operationId: deletePublisher
+      tags:
+        - Publisher
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Delete Publisher successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Publisher not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+components:
+  schemas:
+    SavePublisherRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the publisher
+        location:
+          type: string
+          description: Location of the publisher
+        phone:
+          type: string
+          description: Phone number of the publisher
+        email:
+          type: string
+          description: Email address of the publisher
+        establishedYear:
+          type: string
+          format: year
+          description: Established year of the publisher
+        description:
+          type: string
+          description: Description of the publisher, if any
+      required:
+        - name

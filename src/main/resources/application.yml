@@ -1,0 +1,32 @@
+server:
+  port: 8081
+  shutdown: graceful
+
+spring:
+  application:
+    name: mdm
+  profiles:
+    active: dev
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 5000
+  messages:
+    basename: i18n/messages
+
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+
+cors:
+  methods: "GET, POST, DELETE, PATCH, PUT"
+  headers: "*"
+  mapping: "/**"
+  origins: [ "http://localhost:3000", "https://sqauthuat.sq.com.sg" ]
+  allow-credentials: false
+  max-ages: 3600
+
+async:
+  corePoolSize: 2
+  maxPoolSize: 50
+  queueCapacity: 10000

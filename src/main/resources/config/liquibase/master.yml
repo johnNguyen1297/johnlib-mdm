@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - includeAll:
+      path: config/liquibase/changelog
+      relativeToChangelogFile: false

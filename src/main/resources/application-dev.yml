@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/john-lib?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true
+    username: root
+    password: root
+    hikari:
+      maximum-pool-size: 20
+  liquibase:
+    change-log: classpath:config/liquibase/master.yml
+    enabled: true
+
+logging:
+  level:
+    root: INFO
