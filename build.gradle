@@ -11,10 +11,10 @@ buildscript {
 }
 
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.4.4'
-    id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+  id 'java'
+  id 'org.springframework.boot' version '3.4.4'
+  id 'io.spring.dependency-management' version '1.1.7'
+  id 'org.asciidoctor.jvm.convert' version '3.3.2'
   id 'org.liquibase.gradle' version '2.2.1'
   id 'org.openapi.generator' version "6.6.0"
 }
@@ -23,9 +23,9 @@ group = 'com.john.library'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
 }
 
 sourceSets {
@@ -38,48 +38,48 @@ sourceSets {
 }
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
 }
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 ext {
-    set('snippetsDir', file("build/generated-snippets"))
-    MAPSTRUCT_VERSION = '1.5.5.Final'
+  set('snippetsDir', file("build/generated-snippets"))
+  MAPSTRUCT_VERSION = '1.5.5.Final'
   SPRING_BOOT_VERSION = '3.4.4'
   LIQUIBASE_CORE_VERSION = '4.25.0'
   LIQUIBASE_GRADLE_VERSION = '2.2.1'
 }
 
 dependencies {
-    // Spring Boot Starters
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
+  // Spring Boot Starters
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation "org.springframework.boot:spring-boot-starter-validation"
+  implementation 'org.springframework.boot:spring-boot-starter-aop'
 
-    // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+  // Lombok
+  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
 
-    // Development Tools
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  // Development Tools
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    // Database
-    runtimeOnly 'com.mysql:mysql-connector-j'
+  // Database
+  runtimeOnly 'com.mysql:mysql-connector-j'
 
-    // Testing
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  // Testing
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    // MapStruct
-    implementation "org.mapstruct:mapstruct:${MAPSTRUCT_VERSION}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${MAPSTRUCT_VERSION}"
+  // MapStruct
+  implementation "org.mapstruct:mapstruct:${MAPSTRUCT_VERSION}"
+  annotationProcessor "org.mapstruct:mapstruct-processor:${MAPSTRUCT_VERSION}"
 
   // Liquibase
   compileOnly "org.liquibase:liquibase-core:${LIQUIBASE_CORE_VERSION}"
@@ -90,26 +90,26 @@ dependencies {
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
   implementation 'org.openapitools:jackson-databind-nullable:0.2.1'
   implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
-
-  // Editor Config
 }
 
 tasks.named('test') {
-    outputs.dir snippetsDir
-    useJUnitPlatform()
+  outputs.dir snippetsDir
+  useJUnitPlatform()
 }
 
 tasks.named('asciidoctor') {
-    inputs.dir snippetsDir
-    dependsOn test
+  inputs.dir snippetsDir
+  dependsOn test
 }
 
 // Generate API documentation
-tasks.register("generate-apis", GenerateTask) {
-  def inputDir = file("$rootDir/src/main/resources/open-api/api/")
-  def ymlFiles = inputDir.listFiles().findAll { it.name.endsWith('.yml') }
+def inputDir = file("$rootDir/src/main/resources/open-api/api/")
+def ymlFiles = inputDir.listFiles().findAll { it.name.endsWith('.yml') }
 
-  ymlFiles.each { ymlFile ->
+ymlFiles.each { ymlFile ->
+  String fileName = ymlFile.name.replace(".yml", "")
+  String taskName = "generate-apis-${fileName}"
+  tasks.register(taskName, GenerateTask) {
     inputSpec = ymlFile.toString()
     outputDir = "$buildDir/openapi".toString()
     modelPackage = "com.john.library.mdm.adapter.in.rest.dto.request"
@@ -128,22 +128,16 @@ tasks.register("generate-apis", GenerateTask) {
     typeMappings.putAll([
         "OffsetDateTime": "Instant"
     ])
-    importMappings.putAll([
-        "java.time.OffsetDateTime": "java.time.Instant",
-        "Pageable"                : "org.springframework.data.domain.Pageable",
-        "BaseResponse"            : "com.john.library.mdm.adapter.in.rest.dto.response.BaseResponse",
-        "Metadata"                : "com.john.library.mdm.adapter.in.rest.dto.response.Metadata",
-        "FieldViolation"          : "com.john.library.mdm.adapter.in.rest.dto.response.FieldViolation"
-    ])
     schemaMappings.putAll([
         "java.time.OffsetDateTime": "java.time.Instant",
         "Pageable"                : "org.springframework.data.domain.Pageable",
-        "BaseResponse"            : "com.john.library.mdm.adapter.in.rest.dto.response.BaseResponse",
-        "Metadata"                : "com.john.library.mdm.adapter.in.rest.dto.response.Metadata",
-        "FieldViolation"          : "com.john.library.mdm.adapter.in.rest.dto.response.FieldViolation"
+        "BaseResponse"  : "com.john.library.mdm.adapter.in.rest.dto.response.base.BaseResponse",
+        "Metadata"      : "com.john.library.mdm.adapter.in.rest.dto.response.base.Metadata",
+        "FieldViolation": "com.john.library.mdm.adapter.in.rest.dto.response.base.FieldViolation"
     ])
     validateSpec = false
   }
-}
 
-compileJava.dependsOn("generate-apis")
+  compileJava.dependsOn(taskName)
+  compileTestJava.dependsOn(taskName)
+}

@@ -1,4 +1,4 @@
-package com.john.library.mdm.adapter.in.rest.dto.response;
+package com.john.library.mdm.adapter.in.rest.dto.response.base;
 
 import com.john.library.mdm.application.dto.response.PageResponse;
 import com.john.library.mdm.application.dto.response.Result;
@@ -35,7 +35,7 @@ public class BaseResponse<T> {
     return response;
   }
 
-  public static <E> BaseResponse<List<E>> ofPage(PageResponse<E> page) {
+  private static <E> BaseResponse<List<E>> ofPage(PageResponse<E> page) {
     val response = new BaseResponse<List<E>>();
     response.data     = page.getContent();
     response.metadata = Metadata.builder()

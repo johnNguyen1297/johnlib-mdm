@@ -1,0 +1,238 @@
+openapi: "3.0.4"
+info:
+  version: 1.0.0
+  title: Swagger api for exchanging data with Master Data Service
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8081/api/v1.0/mdm
+    description: Development
+
+paths:
+  /api/v1.0/mdm/tags:
+    post:
+      summary: Create a Tag
+      description: Create a Tag
+      operationId: createTag
+      tags:
+        - Tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveTagRequest"
+        required: true
+      responses:
+        '201':
+          description: Create Tag successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Filter Tags
+      description: Filter Tags
+      operationId: filterTags
+      tags:
+        - Tag
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: "common.yml#/components/schemas/Pageable"
+      responses:
+        '200':
+          description: Filter Tags successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+  /api/v1.0/mdm/tags/{id}:
+    put:
+      summary: Update a Tag
+      description: Update a Tag
+      operationId: updateTag
+      tags:
+        - Tag
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveTagRequest"
+        required: true
+      responses:
+        '200':
+          description: Update Tag successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Tag not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Get Tag Details
+      description: Get Tag Details
+      operationId: getTagDetails
+      tags:
+        - Tag
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get Tag details successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Tag not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    delete:
+      summary: Delete a Tag
+      description: Delete a Tag
+      operationId: deleteTag
+      tags:
+        - Tag
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Delete Tag successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Tag not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+components:
+  schemas:
+    SaveTagRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the tag
+        description:
+          type: string
+          description: Description of the tag, if any
+      required:
+        - name

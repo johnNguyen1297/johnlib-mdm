@@ -1,7 +1,7 @@
 package com.john.library.mdm.adapter.in.rest.handler;
 
 import com.john.library.mdm.adapter.in.rest.dto.request.SavePublisherRequest;
-import com.john.library.mdm.adapter.in.rest.dto.response.BaseResponse;
+import com.john.library.mdm.adapter.in.rest.dto.response.base.BaseResponse;
 import com.john.library.mdm.adapter.in.rest.mapper.PublisherRestInboundMapper;
 import com.john.library.mdm.application.dto.request.AppPageRequest;
 import com.john.library.mdm.application.port.in.usecase.publisher.CreatePublisherCommand;

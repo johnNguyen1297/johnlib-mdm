@@ -1,0 +1,260 @@
+openapi: "3.0.4"
+info:
+  version: 1.0.0
+  title: Swagger api for exchanging data with Master Data Service
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8081/api/v1.0/mdm
+    description: Development
+
+paths:
+  /api/v1.0/mdm/books:
+    post:
+      summary: Create a Book
+      description: Create a Book
+      operationId: createBook
+      tags:
+        - Book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveBookRequest"
+        required: true
+      responses:
+        '201':
+          description: Create Book successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Filter Books
+      description: Filter Books
+      operationId: filterBooks
+      tags:
+        - Book
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: author
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: genre
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: "common.yml#/components/schemas/Pageable"
+      responses:
+        '200':
+          description: Filter Books successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+  /api/v1.0/mdm/books/{id}:
+    put:
+      summary: Update a Book
+      description: Update a Book
+      operationId: updateBook
+      tags:
+        - Book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveBookRequest"
+        required: true
+      responses:
+        '200':
+          description: Update Book successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Book not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Get Book Details
+      description: Get Book Details
+      operationId: getBookDetails
+      tags:
+        - Book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get Book details successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Book not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    delete:
+      summary: Delete a Book
+      description: Delete a Book
+      operationId: deleteBook
+      tags:
+        - Book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Delete Book successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Book not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+components:
+  schemas:
+    SaveBookRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the book
+        author:
+          type: string
+          description: Author of the book
+        genre:
+          type: string
+          description: Genre of the book
+        publishedYear:
+          type: string
+          format: year
+          description: Published year of the book
+        summary:
+          type: string
+          description: Summary of the book, if any
+      required:
+        - title
+        - author
+        - publishedYear

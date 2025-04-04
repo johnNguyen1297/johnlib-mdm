@@ -1,4 +1,4 @@
-package com.john.library.mdm.adapter.in.rest.dto.response;
+package com.john.library.mdm.adapter.in.rest.dto.response.base;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

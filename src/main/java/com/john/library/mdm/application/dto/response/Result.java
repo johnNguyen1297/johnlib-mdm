@@ -2,7 +2,7 @@ package com.john.library.mdm.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.john.library.mdm.common.constant.I18nKey;
-import com.john.library.mdm.common.constant.MessageKeys;
+import com.john.library.mdm.common.constant.MessageKeys.Common;
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,7 +29,7 @@ public class Result<T> {
 
   public static <T> Result<T> ofPage(@NonNull final T data) {
     if (data instanceof PageResponse<?> pageResponse && pageResponse.getContent().isEmpty()) {
-      return of(data, MessageKeys.Common.EMPTY_RESULT);
+      return of(data, Common.NO_MESSAGE);
     }
     return of(data);
   }

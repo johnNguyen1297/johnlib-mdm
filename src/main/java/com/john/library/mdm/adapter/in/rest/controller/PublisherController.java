@@ -2,10 +2,11 @@ package com.john.library.mdm.adapter.in.rest.controller;
 
 import com.john.library.mdm.adapter.in.rest.api.PublisherApi;
 import com.john.library.mdm.adapter.in.rest.dto.request.SavePublisherRequest;
-import com.john.library.mdm.adapter.in.rest.dto.response.BaseResponse;
+import com.john.library.mdm.adapter.in.rest.dto.response.base.BaseResponse;
 import com.john.library.mdm.adapter.in.rest.handler.PublisherHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ public class PublisherController implements PublisherApi {
 
   @Override
   public ResponseEntity<BaseResponse> createPublisher(SavePublisherRequest request) {
-    return ResponseEntity.ok(publisherHandler.createPublisher(request));
+    return new ResponseEntity<>(publisherHandler.createPublisher(request), HttpStatus.CREATED);
   }
 
   @Override

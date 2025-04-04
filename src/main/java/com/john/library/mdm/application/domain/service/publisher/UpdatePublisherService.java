@@ -1,6 +1,7 @@
 package com.john.library.mdm.application.domain.service.publisher;
 
 import com.john.library.mdm.application.dto.response.Result;
+import com.john.library.mdm.application.exception.ResourceNotFoundException;
 import com.john.library.mdm.application.port.in.mapper.PublisherApplicationMapper;
 import com.john.library.mdm.application.port.in.usecase.publisher.UpdatePublisherCommand;
 import com.john.library.mdm.application.port.in.usecase.publisher.UpdatePublisherUseCase;
@@ -26,8 +27,7 @@ public class UpdatePublisherService implements UpdatePublisherUseCase {
   public Result<Integer> execute(UpdatePublisherCommand command) {
     if (!queryPublisherPort.existsById(command.getId())) {
       log.error("Publisher with id {} not found", command.getId());
-      throw new IllegalArgumentException(
-          "Publisher not found"); // TODO 03/04/2025: throw own Exception
+      throw new ResourceNotFoundException("Publisher", command.getId());
     }
 
     if (queryPublisherPort.existsByNameAndIdNot(command.getName(), command.getId())) {

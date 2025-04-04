@@ -1,0 +1,246 @@
+openapi: "3.0.4"
+info:
+  version: 1.0.0
+  title: Swagger api for exchanging data with Master Data Service
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8081/api/v1.0/mdm
+    description: Development
+
+paths:
+  /api/v1.0/mdm/shelves:
+    post:
+      summary: Create a Shelf
+      description: Create a Shelf
+      operationId: createShelf
+      tags:
+        - Shelf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveShelfRequest"
+        required: true
+      responses:
+        '201':
+          description: Create Shelf successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Filter Shelves
+      description: Filter Shelves
+      operationId: filterShelves
+      tags:
+        - Shelf
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: location
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: "common.yml#/components/schemas/Pageable"
+      responses:
+        '200':
+          description: Filter Shelves successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+  /api/v1.0/mdm/shelves/{id}:
+    put:
+      summary: Update a Shelf
+      description: Update a Shelf
+      operationId: updateShelf
+      tags:
+        - Shelf
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveShelfRequest"
+        required: true
+      responses:
+        '200':
+          description: Update Shelf successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Shelf not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Get Shelf Details
+      description: Get Shelf Details
+      operationId: getShelfDetails
+      tags:
+        - Shelf
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get Shelf details successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Shelf not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    delete:
+      summary: Delete a Shelf
+      description: Delete a Shelf
+      operationId: deleteShelf
+      tags:
+        - Shelf
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Delete Shelf successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Shelf not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+components:
+  schemas:
+    SaveShelfRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the shelf
+        location:
+          type: string
+          description: Location of the shelf
+        description:
+          type: string
+          description: Description of the shelf, if any
+      required:
+        - name

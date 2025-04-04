@@ -1,0 +1,241 @@
+openapi: "3.0.4"
+info:
+  version: 1.0.0
+  title: Swagger api for exchanging data with Master Data Service
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8081/api/v1.0/mdm
+    description: Development
+
+paths:
+  /api/v1.0/mdm/authors:
+    post:
+      summary: Create an Author
+      description: Create an Author
+      operationId: createAuthor
+      tags:
+        - Author
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveAuthorRequest"
+        required: true
+      responses:
+        '201':
+          description: Create Author successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Filter Authors
+      description: Filter Authors
+      operationId: filterAuthors
+      tags:
+        - Author
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: pageable
+          required: false
+          schema:
+            $ref: "common.yml#/components/schemas/Pageable"
+      responses:
+        '200':
+          description: Filter Authors successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+  /api/v1.0/mdm/authors/{id}:
+    put:
+      summary: Update an Author
+      description: Update an Author
+      operationId: updateAuthor
+      tags:
+        - Author
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveAuthorRequest"
+        required: true
+      responses:
+        '200':
+          description: Update Author successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Author not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    get:
+      summary: Get Author Details
+      description: Get Author Details
+      operationId: getAuthorDetails
+      tags:
+        - Author
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get Author details successfully
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Author not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+    delete:
+      summary: Delete an Author
+      description: Delete an Author
+      operationId: deleteAuthor
+      tags:
+        - Author
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Delete Author successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '401':
+          description: Authentication failed
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '404':
+          description: Author not found
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
+
+components:
+  schemas:
+    SaveAuthorRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the author
+        bio:
+          type: string
+          description: Biography of the author, if any
+        nationality:
+          type: string
+          description: Nationality of the author
+      required:
+        - name
