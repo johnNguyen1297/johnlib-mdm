@@ -8,8 +8,8 @@ public class DomainException extends RuntimeException {
 
   protected final transient I18nKey i18nKey;
   protected final transient String field;
-  protected final transient Object[] extraData;
   protected final transient Object fieldValue;
+  protected final transient Object[] extraData;
 
   public DomainException(I18nKey i18nKey) {
     this(i18nKey, null);

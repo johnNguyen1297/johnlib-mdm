@@ -2,7 +2,7 @@ package com.john.library.mdm.adapter.in.rest.handler;
 
 import com.john.library.mdm.adapter.in.rest.dto.request.SavePublisherRequest;
 import com.john.library.mdm.adapter.in.rest.dto.response.base.BaseResponse;
-import com.john.library.mdm.adapter.in.rest.mapper.PublisherRestInboundMapper;
+import com.john.library.mdm.adapter.in.rest.mapper.PublisherRestMapper;
 import com.john.library.mdm.application.dto.request.AppPageRequest;
 import com.john.library.mdm.application.port.in.usecase.publisher.CreatePublisherCommand;
 import com.john.library.mdm.application.port.in.usecase.publisher.CreatePublisherUseCase;
@@ -31,16 +31,15 @@ public class PublisherHandler {
   private final DeletePublisherUseCase deletePublisherUseCase;
   private final GetPublisherDetailUseCase getPublisherDetailUseCase;
 
-  private final PublisherRestInboundMapper restInboundMapper;
+  private final PublisherRestMapper restInboundMapper;
 
   public BaseResponse createPublisher(SavePublisherRequest request) {
     CreatePublisherCommand command = restInboundMapper.mapToCommand(request);
     return BaseResponse.of(createPublisherUseCase.execute(command));
   }
 
-  public Void deletePublisher(Integer id) {
-    deletePublisherUseCase.execute(id);
-    return null;
+  public BaseResponse deletePublisher(Integer id) {
+    return BaseResponse.of(deletePublisherUseCase.execute(id));
   }
 
   public BaseResponse filterPublishers(String q, String establishedYear, Pageable pageable) {

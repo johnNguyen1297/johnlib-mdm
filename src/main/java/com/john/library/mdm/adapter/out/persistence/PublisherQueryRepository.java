@@ -4,10 +4,9 @@ import com.john.library.mdm.adapter.out.persistence.jpa.entity.PublisherJpa;
 import com.john.library.mdm.adapter.out.persistence.jpa.mapper.PublisherPersistenceMapper;
 import com.john.library.mdm.adapter.out.persistence.jpa.repository.PublisherJpaRepository;
 import com.john.library.mdm.application.domain.model.Publisher;
-import com.john.library.mdm.application.dto.response.PageResponse;
+import com.john.library.mdm.application.dto.response.AppPageResponse;
 import com.john.library.mdm.application.port.in.usecase.publisher.FilterPublisherQuery;
-import com.john.library.mdm.application.port.out.publisher.FilterPublisherPort;
-import com.john.library.mdm.application.port.out.publisher.QueryPublisherPort;
+import com.john.library.mdm.application.port.out.persistence.QueryPublisherPort;
 import com.john.library.mdm.common.util.PageHelper;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,13 +19,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class PublisherQueryRepository implements FilterPublisherPort, QueryPublisherPort {
+public class PublisherQueryRepository implements QueryPublisherPort {
 
   private final PublisherJpaRepository publisherJpaRepository;
   private final PublisherPersistenceMapper publisherPersistenceMapper;
 
   @Override
-  public PageResponse<Publisher> listByFilter(FilterPublisherQuery query) {
+  public AppPageResponse<Publisher> listByFilter(FilterPublisherQuery query) {
     Page<PublisherJpa> page = publisherJpaRepository.listByFilter(query.getQ(),
                                                                   query.getEstablishedYear(),
                                                                   PageHelper.mapToPageable(

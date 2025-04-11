@@ -21,6 +21,33 @@ components:
     Metadata:
       type: object
       properties:
+        pageInfo:
+          $ref: "#/components/schemas/PageInfo"
+        apiErrorDetail:
+          $ref: "#/components/schemas/ApiErrorDetail"
+
+    ApiErrorDetail:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        instance:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/FieldViolation"
+
+    PageInfo:
+      type: object
+      properties:
         page:
           type: integer
           format: int32
@@ -37,14 +64,6 @@ components:
         totalElements:
           type: integer
           format: int64
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldViolation'
-        message:
-          type: string
-        field:
-          type: string
 
     FieldViolation:
       type: object

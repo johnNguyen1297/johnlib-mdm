@@ -208,6 +208,10 @@ paths:
       responses:
         '204':
           description: Delete Book successfully
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
         '400':
           description: Bad Request
           content:
@@ -238,23 +242,52 @@ components:
     SaveBookRequest:
       type: object
       properties:
+        id:
+          type: integer
+          description: Unique identifier of the book
+        isbn:
+          type: string
+          description: ISBN of the book
         title:
           type: string
           description: Title of the book
-        author:
+        publisherId:
+          type: integer
+          description: Publisher ID of the book
+        publicationYear:
+          type: integer
+          description: Year the book was published
+        format:
           type: string
-          description: Author of the book
-        genre:
+          description: Format of the book (e.g., Hardcover, Paperback)
+          enum:
+            - Hardcover
+            - Paperback
+            - Ebook
+        printLength:
+          type: integer
+          description: Number of pages in the book
+        description:
           type: string
-          description: Genre of the book
-        publishedYear:
+          description: Description of the book
+        language:
           type: string
-          format: year
-          description: Published year of the book
-        summary:
-          type: string
-          description: Summary of the book, if any
+          description: Language of the book
+        authors:
+          type: array
+          items:
+            type: integer
+          description: List of author IDs associated with the book
+        tags:
+          type: array
+          items:
+            type: integer
+          description: List of tag IDs associated with the book
       required:
+        - id
+        - isbn
         - title
-        - author
-        - publishedYear
+        - publisherId
+        - publicationYear
+        - format
+        - authors

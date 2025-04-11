@@ -1,0 +1,54 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.openapitools:openapi-generator-gradle-plugin:6.6.0"
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:3.4.4"
+    classpath "org.liquibase:liquibase-gradle-plugin:2.2.1"
+  }
+}
+
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+// Generate API documentation
+def inputDir = file("$rootDir/src/main/resources/open-api/api/")
+def ymlFiles = inputDir.listFiles().findAll { it.name.endsWith('.yml') }
+
+ymlFiles.each { ymlFile ->
+  String fileName = ymlFile.name.replace(".yml", "")
+  String taskName = "generate-apis-${fileName}"
+  tasks.register(taskName, GenerateTask) {
+    inputSpec = ymlFile.toString()
+    outputDir = layout.buildDirectory.dir("openapi").get().asFile.toString()
+    modelPackage = "com.john.library.mdm.adapter.in.rest.dto.request"
+    apiPackage = "com.john.library.mdm.adapter.in.rest.api"
+    packageName = "com.john.library.mdm.adapter.in.rest"
+    generatorName = "spring"
+    configOptions.putAll([
+        "dateLibrary"      : "java8",
+        "interfaceOnly"    : "true",
+        "useTags"          : "true",
+        "useSpringBoot3"   : "true",
+        "useJakartaEe"     : "true",
+        "useBeanValidation": "true",
+        "skipOverwrite"    : "true"
+    ])
+    typeMappings.putAll([
+        "OffsetDateTime": "Instant"
+    ])
+    schemaMappings.putAll([
+        "java.time.OffsetDateTime": "java.time.Instant",
+        "Pageable"                : "org.springframework.data.domain.Pageable",
+        "BaseResponse"            : "com.john.library.mdm.adapter.in.rest.dto.response.base.BaseResponse",
+        "Metadata"                : "com.john.library.mdm.adapter.in.rest.dto.response.base.Metadata",
+        "FieldViolation"          : "com.john.library.mdm.adapter.in.rest.dto.response.base.FieldViolation",
+        "ApiErrorDetail"          : "com.john.library.mdm.adapter.in.rest.dto.response.base.ApiErrorDetail",
+        "PageInfo"                : "com.john.library.mdm.adapter.in.rest.dto.response.base.PageInfo"
+    ])
+    validateSpec = false
+  }
+
+  compileJava.dependsOn(taskName)
+  compileTestJava.dependsOn(taskName)
+}

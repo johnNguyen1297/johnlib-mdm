@@ -28,7 +28,8 @@ public class Result<T> {
   }
 
   public static <T> Result<T> ofPage(@NonNull final T data) {
-    if (data instanceof PageResponse<?> pageResponse && pageResponse.getContent().isEmpty()) {
+    if (data instanceof AppPageResponse<?> appPageResponse && appPageResponse.getContent()
+                                                                             .isEmpty()) {
       return of(data, Common.NO_MESSAGE);
     }
     return of(data);

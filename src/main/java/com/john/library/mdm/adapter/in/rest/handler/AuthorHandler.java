@@ -2,7 +2,7 @@ package com.john.library.mdm.adapter.in.rest.handler;
 
 import com.john.library.mdm.adapter.in.rest.dto.request.SaveAuthorRequest;
 import com.john.library.mdm.adapter.in.rest.dto.response.base.BaseResponse;
-import com.john.library.mdm.adapter.in.rest.mapper.AuthorRestInboundMapper;
+import com.john.library.mdm.adapter.in.rest.mapper.AuthorRestMapper;
 import com.john.library.mdm.application.dto.request.AppPageRequest;
 import com.john.library.mdm.application.port.in.usecase.author.CreateAuthorCommand;
 import com.john.library.mdm.application.port.in.usecase.author.CreateAuthorUseCase;
@@ -30,16 +30,15 @@ public class AuthorHandler {
   private final DeleteAuthorUseCase deleteAuthorUseCase;
   private final GetAuthorDetailUseCase getAuthorDetailUseCase;
 
-  private final AuthorRestInboundMapper restInboundMapper;
+  private final AuthorRestMapper restInboundMapper;
 
   public BaseResponse createAuthor(SaveAuthorRequest request) {
     CreateAuthorCommand command = restInboundMapper.mapToCommand(request);
     return BaseResponse.of(createAuthorUseCase.execute(command));
   }
 
-  public Void deleteAuthor(Integer id) {
-    deleteAuthorUseCase.execute(id);
-    return null;
+  public BaseResponse deleteAuthor(Integer id) {
+    return BaseResponse.of(deleteAuthorUseCase.execute(id));
   }
 
   public BaseResponse filterAuthors(String q, Pageable pageable) {

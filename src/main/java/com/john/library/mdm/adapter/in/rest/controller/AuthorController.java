@@ -23,7 +23,7 @@ public class AuthorController implements AuthorApi {
   }
 
   @Override
-  public ResponseEntity<Void> deleteAuthor(Integer id) {
+  public ResponseEntity<BaseResponse> deleteAuthor(Integer id) {
     return ResponseEntity.ok(authorHandler.deleteAuthor(id));
   }
 

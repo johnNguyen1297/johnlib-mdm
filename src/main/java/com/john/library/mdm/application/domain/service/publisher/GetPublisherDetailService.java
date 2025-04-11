@@ -1,10 +1,10 @@
 package com.john.library.mdm.application.domain.service.publisher;
 
-import com.john.library.mdm.adapter.in.rest.dto.response.PublisherListingItem;
 import com.john.library.mdm.application.dto.response.Result;
 import com.john.library.mdm.application.port.in.mapper.PublisherApplicationMapper;
 import com.john.library.mdm.application.port.in.usecase.publisher.GetPublisherDetailUseCase;
-import com.john.library.mdm.application.port.out.publisher.QueryPublisherPort;
+import com.john.library.mdm.application.port.in.usecase.publisher.PublisherListingItem;
+import com.john.library.mdm.application.port.out.persistence.QueryPublisherPort;
 import com.john.library.mdm.common.UseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

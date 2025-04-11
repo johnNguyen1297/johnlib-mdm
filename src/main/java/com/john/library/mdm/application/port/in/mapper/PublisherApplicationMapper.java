@@ -1,8 +1,8 @@
 package com.john.library.mdm.application.port.in.mapper;
 
-import com.john.library.mdm.adapter.in.rest.dto.response.PublisherListingItem;
 import com.john.library.mdm.application.domain.model.Publisher;
 import com.john.library.mdm.application.port.in.usecase.publisher.CreatePublisherCommand;
+import com.john.library.mdm.application.port.in.usecase.publisher.PublisherListingItem;
 import com.john.library.mdm.application.port.in.usecase.publisher.UpdatePublisherCommand;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
