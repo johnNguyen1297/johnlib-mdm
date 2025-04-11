@@ -1,0 +1,74 @@
+import java.util.regex.Pattern
+
+// Scan invalid imports (Importing classes from adapter package in application package)
+tasks.register('scanInvalidImports') {
+  def invalidImportPattern = ~/import\s+com\.john\.library\.mdm\.adapter\..*/
+  def applicationDir = file('src/main/java/com/john/library/mdm/application')
+  def invalidImports = []
+
+  if (applicationDir.exists()) {
+    applicationDir.eachFileRecurse { file ->
+      if (file.name.endsWith('.java')) {
+        def lines = file.readLines()
+        lines.eachWithIndex { line, index ->
+          if (line =~ invalidImportPattern) {
+            def relativePathFromProjectDir = project.projectDir.relativePath(file)
+            invalidImports << "File ${relativePathFromProjectDir} \n\t---> at line ${index + 1}: ${line}"
+          }
+        }
+      }
+    }
+  }
+
+  if (!invalidImports.isEmpty()) {
+    String lines = invalidImports.join("\n")
+    throw new GradleException("Invalid imports detected:\n" + lines + "\n" +
+        "All classes in the application package MUST NOT import any classes from the adapter package.")
+  }
+}
+compileJava.dependsOn('scanInvalidImports')
+compileTestJava.dependsOn('scanInvalidImports')
+
+// Scan redundant imports
+tasks.register('scanRedundantImports') {
+  Pattern importPattern = ~/^import\s+([\w.]+);$/
+  File applicationDir = file('src/main/java')
+  def redundantImports = []
+
+  if (applicationDir.exists()) {
+    applicationDir.eachFileRecurse { file ->
+      String relativePathFromProjectDir = project.projectDir.relativePath(file)
+      if (file.name.endsWith('.java')) {
+        List<String> lines = file.readLines()
+        List<String> imports = lines.findAll { it =~ importPattern }
+        List<String> contentWithoutImports = lines - imports
+
+        Set<String> iteratedImports = new HashSet<>()
+        imports.each { currentImport ->
+          // Check if the import is duplicated
+          if (iteratedImports.contains(currentImport)) {
+            redundantImports << "File ${relativePathFromProjectDir} \n\t---> Redundant import: ${currentImport}"
+            return
+          }
+
+          iteratedImports.add(currentImport)
+
+          // Extract the class name from the import line
+          String importedClassName = currentImport.replace("import ", "").replace(";", "").trim().split("\\.").last()
+          boolean isUsed = contentWithoutImports.any { it.contains(importedClassName) }
+          if (!isUsed) {
+            redundantImports << "File ${relativePathFromProjectDir} \n\t---> Redundant import: ${currentImport}"
+          }
+        }
+      }
+    }
+  }
+
+  if (!redundantImports.isEmpty()) {
+    String lines = redundantImports.join("\n")
+    throw new GradleException("Redundant imports detected:\n" + lines + "\n" +
+        "Please remove unused imports to keep the code clean.")
+  }
+}
+compileJava.dependsOn('scanRedundantImports')
+compileTestJava.dependsOn('scanRedundantImports')

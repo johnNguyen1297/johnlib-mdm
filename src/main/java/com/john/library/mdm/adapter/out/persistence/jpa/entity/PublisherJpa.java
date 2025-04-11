@@ -6,8 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Year;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +40,7 @@ public class PublisherJpa extends Audit {
   @Column(name = Database.Table.Publisher.Columns.LOCATION)
   private String location;
 
-  @Column(name = Database.Table.Publisher.Columns.PHONE, length = 20)
+  @Column(name = Database.Table.Publisher.Columns.PHONE)
   private String phone;
 
   @Column(name = Database.Table.Publisher.Columns.EMAIL)
@@ -49,4 +51,7 @@ public class PublisherJpa extends Audit {
 
   @Column(name = Database.Table.Publisher.Columns.DESCRIPTION)
   private String description;
+
+  @OneToMany(mappedBy = "publisher")
+  private List<BookJpa> books;
 }

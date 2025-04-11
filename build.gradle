@@ -1,5 +1,3 @@
-import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
-
 buildscript {
   repositories {
     mavenCentral()
@@ -18,6 +16,10 @@ plugins {
   id 'org.liquibase.gradle' version '2.2.1'
   id 'org.openapi.generator' version "6.6.0"
 }
+
+// Tasks
+apply from: 'gradle/scan-tasks.gradle'
+apply from: 'gradle/generate-tasks.gradle'
 
 group = 'com.john.library'
 version = '0.0.1-SNAPSHOT'
@@ -66,9 +68,6 @@ dependencies {
   compileOnly 'org.projectlombok:lombok'
   annotationProcessor 'org.projectlombok:lombok'
 
-  // Development Tools
-  developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
   // Database
   runtimeOnly 'com.mysql:mysql-connector-j'
 
@@ -87,9 +86,13 @@ dependencies {
   compileOnly "org.liquibase:liquibase-gradle-plugin:${LIQUIBASE_GRADLE_VERSION}"
 
   // OpenAPI Generator
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
-  implementation 'org.openapitools:jackson-databind-nullable:0.2.1'
+  implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
+  implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
   implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+
+  // Logging
+  implementation 'io.opentelemetry:opentelemetry-api:1.25.0'
+
 }
 
 tasks.named('test') {
@@ -100,44 +103,4 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
   inputs.dir snippetsDir
   dependsOn test
-}
-
-// Generate API documentation
-def inputDir = file("$rootDir/src/main/resources/open-api/api/")
-def ymlFiles = inputDir.listFiles().findAll { it.name.endsWith('.yml') }
-
-ymlFiles.each { ymlFile ->
-  String fileName = ymlFile.name.replace(".yml", "")
-  String taskName = "generate-apis-${fileName}"
-  tasks.register(taskName, GenerateTask) {
-    inputSpec = ymlFile.toString()
-    outputDir = "$buildDir/openapi".toString()
-    modelPackage = "com.john.library.mdm.adapter.in.rest.dto.request"
-    apiPackage = "com.john.library.mdm.adapter.in.rest.api"
-    packageName = "com.john.library.mdm.adapter.in.rest"
-    generatorName = "spring"
-    configOptions.putAll([
-        "dateLibrary"      : "java8",
-        "interfaceOnly"    : "true",
-        "useTags"          : "true",
-        "useSpringBoot3"   : "true",
-        "useJakartaEe"     : "true",
-        "useBeanValidation": "true",
-        "skipOverwrite"    : "true"
-    ])
-    typeMappings.putAll([
-        "OffsetDateTime": "Instant"
-    ])
-    schemaMappings.putAll([
-        "java.time.OffsetDateTime": "java.time.Instant",
-        "Pageable"                : "org.springframework.data.domain.Pageable",
-        "BaseResponse"  : "com.john.library.mdm.adapter.in.rest.dto.response.base.BaseResponse",
-        "Metadata"      : "com.john.library.mdm.adapter.in.rest.dto.response.base.Metadata",
-        "FieldViolation": "com.john.library.mdm.adapter.in.rest.dto.response.base.FieldViolation"
-    ])
-    validateSpec = false
-  }
-
-  compileJava.dependsOn(taskName)
-  compileTestJava.dependsOn(taskName)
 }

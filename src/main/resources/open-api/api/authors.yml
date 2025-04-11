@@ -198,6 +198,10 @@ paths:
       responses:
         '204':
           description: Delete Author successfully
+          content:
+            "*/*":
+              schema:
+                $ref: "common.yml#/components/schemas/BaseResponse"
         '400':
           description: Bad Request
           content:

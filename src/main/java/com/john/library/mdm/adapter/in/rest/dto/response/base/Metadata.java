@@ -1,6 +1,6 @@
 package com.john.library.mdm.adapter.in.rest.dto.response.base;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,15 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Metadata {
 
-  private Integer page;
-  private Integer totalPage;
-  private Boolean hasNextPage;
-  private Boolean hasPreviousPage;
-  private Integer size;
-  private Long totalElements;
-  private List<FieldViolation> errors;
-  private String message;
-  private String field;
+  private PageInfo pageInfo;
+  private ApiErrorDetail apiErrorDetail;
 }

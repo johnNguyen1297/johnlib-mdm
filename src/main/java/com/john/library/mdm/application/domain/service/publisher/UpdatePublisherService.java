@@ -1,12 +1,14 @@
 package com.john.library.mdm.application.domain.service.publisher;
 
+import com.john.library.mdm.application.domain.model.Publisher.Fields;
 import com.john.library.mdm.application.dto.response.Result;
+import com.john.library.mdm.application.exception.DuplicateResourceException;
 import com.john.library.mdm.application.exception.ResourceNotFoundException;
 import com.john.library.mdm.application.port.in.mapper.PublisherApplicationMapper;
 import com.john.library.mdm.application.port.in.usecase.publisher.UpdatePublisherCommand;
 import com.john.library.mdm.application.port.in.usecase.publisher.UpdatePublisherUseCase;
-import com.john.library.mdm.application.port.out.publisher.QueryPublisherPort;
-import com.john.library.mdm.application.port.out.publisher.UpdatePublisherPort;
+import com.john.library.mdm.application.port.out.persistence.CommandPublisherPort;
+import com.john.library.mdm.application.port.out.persistence.QueryPublisherPort;
 import com.john.library.mdm.common.UseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +19,7 @@ import lombok.val;
 @Slf4j
 public class UpdatePublisherService implements UpdatePublisherUseCase {
 
-  private final UpdatePublisherPort updatePublisherPort;
+  private final CommandPublisherPort commandPublisherPort;
 
   private final QueryPublisherPort queryPublisherPort;
 
@@ -32,11 +34,10 @@ public class UpdatePublisherService implements UpdatePublisherUseCase {
 
     if (queryPublisherPort.existsByNameAndIdNot(command.getName(), command.getId())) {
       log.error("Publisher with name {} already exists", command.getName());
-      throw new IllegalArgumentException(
-          "Publisher with name already exists"); // TODO 03/04/2025: throw own Exception
+      throw new DuplicateResourceException("Publisher", Fields.name);
     }
 
     val publisher = applicationInboundMapper.mapToDomain(command);
-    return Result.of(updatePublisherPort.update(publisher));
+    return Result.of(commandPublisherPort.update(publisher));
   }
 }

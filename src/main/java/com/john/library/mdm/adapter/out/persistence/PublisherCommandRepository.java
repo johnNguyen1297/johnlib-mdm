@@ -4,9 +4,7 @@ import com.john.library.mdm.adapter.out.persistence.jpa.entity.PublisherJpa;
 import com.john.library.mdm.adapter.out.persistence.jpa.mapper.PublisherPersistenceMapper;
 import com.john.library.mdm.adapter.out.persistence.jpa.repository.PublisherJpaRepository;
 import com.john.library.mdm.application.domain.model.Publisher;
-import com.john.library.mdm.application.port.out.publisher.CreatePublisherPort;
-import com.john.library.mdm.application.port.out.publisher.DeletePublisherPort;
-import com.john.library.mdm.application.port.out.publisher.UpdatePublisherPort;
+import com.john.library.mdm.application.port.out.persistence.CommandPublisherPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -14,8 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class PublisherCommandRepository implements CreatePublisherPort, UpdatePublisherPort,
-                                                   DeletePublisherPort {
+public class PublisherCommandRepository implements CommandPublisherPort {
 
   private final PublisherJpaRepository publisherJpaRepository;
   private final PublisherPersistenceMapper publisherPersistenceMapper;
